@@ -163,7 +163,8 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
       return res.status(400).json({
-        success: "Give All Deatils!",
+        success: false,
+        message: "Give All Details!",
       });
     }
     const userExists = await User.findByEmail(email);
@@ -198,27 +199,27 @@ exports.login = async (req, res) => {
     });
 
     return res
-  .cookie("accessToken", accessToken, {
-  httpOnly: true,
-  sameSite: "lax",
-  secure: false,
-  maxAge: 2 * 60 * 60 * 1000,
-})
-.cookie("refreshToken", refreshToken, {
-  httpOnly: true,
-  sameSite: "lax",
-  secure: false,
-  maxAge: 7 * 24 * 60 * 60 * 1000,
-})
-.json({
-    success: true,
-    message: "Logged in successfully!",
-    User: userExists,
-    accessToken,
-    refreshToken,
-  });
-
+      .cookie("accessToken", accessToken, {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false,
+        maxAge: 2 * 60 * 60 * 1000,
+      })
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      })
+      .json({
+        success: true,
+        message: "Logged in successfully!",
+        User: userExists,
+        accessToken,
+        refreshToken,
+      });
   } catch (error) {
+    console.error("Login Function Error:", error.message);
     return res.status(500).json({
       success: false,
       message: "Error Occuered While Loging In User!",
@@ -276,43 +277,43 @@ exports.refreshAccessToken = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Error While Token Refresh",
-      error:error.message
+      error: error.message,
     });
   }
 };
 
-exports.getUser = async(req,res) => {
+exports.getUser = async (req, res) => {
   try {
-    const {email} = req.user;
-    if(!email){
+    const { email } = req.user;
+    if (!email) {
       return res.status(403).json({
-        success:false,
-        message:'User Not Authenticated Login Again'
+        success: false,
+        message: "User Not Authenticated Login Again",
       });
-    };
+    }
 
     const findUser = await User.findByEmail(email);
 
-    if(!findUser){
+    if (!findUser) {
       return res.status(403).json({
-        success:false,
-        message:"User Not Found!"
+        success: false,
+        message: "User Not Found!",
       });
-    };
+    }
 
     return res.status(200).json({
-      success:true,
-      message:'User Fetching Done.',
-      data:findUser
-    })
+      success: true,
+      message: "User Fetching Done.",
+      data: findUser,
+    });
   } catch (error) {
     return res.status(500).json({
-      success:false,
-      message:"Error While Fetching User!",
-      error:error.message
-    })
+      success: false,
+      message: "Error While Fetching User!",
+      error: error.message,
+    });
   }
-}
+};
 
 exports.logout = (req, res) => {
   res.clearCookie("accessToken");
