@@ -41,11 +41,15 @@ exports.createMealPlan = async (req, res) => {
       });
     }
 
-    if (preferredFood.length === 0 || allergen.length === 0) {
+    if (preferredFood.length === 0) {
       return res.status(400).json({
         success: false,
         message: "please Provide All Details",
       });
+    }
+
+    if( allergen.length === 0 ){
+      allergen[0] = "None";
     }
 
     const prompt = `
