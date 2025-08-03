@@ -17,9 +17,16 @@ app.use(fileUpload({
     tempFileDir: '/tmp/'
 }));
 
+
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://satvikai.netlify.app",
+];
+
 app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true,
+  origin: allowedOrigins,
+  credentials: true,
 }));
 
 // Routes
