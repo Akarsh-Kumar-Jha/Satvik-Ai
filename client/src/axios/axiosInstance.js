@@ -16,7 +16,7 @@ import toast from 'react-hot-toast';
             if(error.response.status === 401 && !orginalRequest._retry){
                 orginalRequest._retry = true;
                 try {
-                    await axiosInstance.post('https://satvik-ai-backend.vercel.app/api/v1');
+                    await axiosInstance.post('/refresh-token');
                    return axiosInstance(orginalRequest);
                 } catch (refreshError) {
                     toast.error('Token Expired Please Login again');
