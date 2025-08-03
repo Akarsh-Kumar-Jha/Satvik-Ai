@@ -38,7 +38,7 @@ function AuthDiv({
       const url =
         flexDirection === "row-reverse"
           ? "https://satvik-ai.vercel.app/api/v1/login"
-          : "http://localhost:8000/api/v1/signup";
+          : "https://satvik-ai.vercel.app/api/v1/signup";
       const dataObj = {};
       if (data.email) dataObj.email = data.email;
       if (data.password) dataObj.password = data.password;
