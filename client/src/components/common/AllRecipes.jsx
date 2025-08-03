@@ -15,7 +15,7 @@ const AllRecipes = (fetchUser) => {
     setLoading(true);
     const fetchRecipes = async () => {
       try {
-        const res = await axios.get('http://localhost:8000/api/v1/recipe/get-recipes', {
+        const res = await axios.get('https://satvik-ai.vercel.app/api/v1/recipe/get-recipes', {
           withCredentials: true,
         });
 
