@@ -19,13 +19,11 @@ app.use(fileUpload({
 
 
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://satvikai.netlify.app",
-];
-
 app.use(cors({
-  origin: allowedOrigins,
+  origin: [
+    'http://localhost:5173',
+    'https://satvikai.netlify.app',
+  ],
   credentials: true,
 }));
 
