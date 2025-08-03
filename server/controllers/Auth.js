@@ -261,12 +261,12 @@ exports.refreshAccessToken = async (req, res) => {
     );
 
     return res
-    .cookie("accessToken", newAccessToken, {
-  httpOnly: true,
-  sameSite: "None",
-  secure: true, 
-  maxAge: ...
-}).json({
+      .cookie("accessToken", newAccessToken, {
+    httpOnly: true,
+    sameSite: "None",
+    secure: true,
+    maxAge: 2 * 60 * 60 * 1000,
+  }).json({
         success: true,
         message: "Successfully Token Refreshed",
         newAccessToken,
