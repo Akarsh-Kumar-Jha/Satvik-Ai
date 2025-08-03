@@ -23,15 +23,20 @@ function GetMeal() {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    const numberFields = ["age", "height", "weight", "mealsPerDay"];
-    const isNumber = numberFields.includes(name);
+  const { name, value } = e.target;
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: isNumber ? Number(value) : value.toLowerCase(),
-    }));
-  };
+  const numberFields = ["age", "height", "weight", "mealsPerDay"];
+  const isNumber = numberFields.includes(name);
+
+  if (isNumber && !/^\d*$/.test(value)) {
+    return;
+  }
+
+  setFormData((prev) => ({
+    ...prev,
+    [name]: isNumber ? Number(value) : value,
+  }));
+};
 
   const togglePreferredFood = (value) => {
     setFormData((prev) => ({
@@ -66,21 +71,48 @@ function GetMeal() {
       goal,
     } = finalPayload;
 
-    console.log("Final Data-> ",finalPayload);
-
     if (
-      !age ||
-      !gender ||
-      !height ||
-      !weight ||
-      !activityLevel ||
-      preferredFood.length === 0 ||
-      !mealsPerDay ||
-      !goal
-    ) {
-      toast.error("Please fill in all required fields.");
-      return;
-    }
+  !age ||
+  !gender ||
+  !height ||
+  !weight ||
+  !activityLevel ||
+  preferredFood.length === 0 ||
+  !mealsPerDay ||
+  !goal
+) {
+  toast.error("Please fill in all required fields.");
+  return;
+}
+
+if (age <= 0) {
+  toast.error("Enter a valid age.");
+  return;
+}
+
+if (height > 250) {
+  toast.error("Height cannot be greater than 250 cm.");
+  return;
+}
+
+
+if (height < 0) {
+  toast.error("Enter a valid Height.");
+  return;
+}
+
+
+if (weight > 500 || weight < 0) {
+  toast.error("Weight not valid!");
+  return;
+}
+
+if (mealsPerDay < 1 || mealsPerDay > 10) {
+  toast.error("Meals per day should be between 1 and 10.");
+  return;
+}
+
+ console.log("Final Data-> ",finalPayload);
 
     try {
         setApiCalled(true);
@@ -134,11 +166,11 @@ function GetMeal() {
         </h1>
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Input label="Age" name="age" value={formData.age} onChange={handleChange} type="number" />
+          <Input label="Age" name="age" value={formData.age} onChange={handleChange} type="text" />
           <Select label="Gender" name="gender" value={formData.gender} onChange={handleChange} options={["Male", "Female"]} />
 
-          <Input label="Height (cm)" name="height" value={formData.height} onChange={handleChange} type="number" />
-          <Input label="Weight (kg)" name="weight" value={formData.weight} onChange={handleChange} type="number" />
+          <Input label="Height (cm)" name="height" value={formData.height} onChange={handleChange} type="text" />
+          <Input label="Weight (kg)" name="weight" value={formData.weight} onChange={handleChange} type="text" />
 
           <Select
             label="Activity Level"
@@ -185,7 +217,7 @@ function GetMeal() {
             />
           </div>
 
-          <Input label="Meals per Day" name="mealsPerDay" value={formData.mealsPerDay} onChange={handleChange} type="number" />
+          <Input label="Meals per Day" name="mealsPerDay" value={formData.mealsPerDay} onChange={handleChange} type="text" />
 
           <Select
             label="Goal"
@@ -211,6 +243,22 @@ function GetMeal() {
 
 // Input Component
 function Input({ label, name, value, onChange, type = "text" }) {
+  const handleKeyDown = (e) => {
+    const allowedKeys = [
+      "Backspace",
+      "Tab",
+      "ArrowLeft",
+      "ArrowRight",
+      "Delete",
+    ];
+
+    const isNumber = /^[0-9]$/.test(e.key);
+
+    if (!isNumber && !allowedKeys.includes(e.key)) {
+      e.preventDefault();
+    }
+  };
+
   return (
     <div className="relative w-full">
       <input
@@ -219,6 +267,7 @@ function Input({ label, name, value, onChange, type = "text" }) {
         name={name}
         value={value}
         onChange={onChange}
+        onKeyDown={handleKeyDown}
         placeholder=" "
         className="peer w-full px-4 pt-6 pb-2 bg-zinc-800 text-white border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400"
       />
@@ -231,6 +280,7 @@ function Input({ label, name, value, onChange, type = "text" }) {
     </div>
   );
 }
+
 
 // Select Component
 function Select({ label, name, value, onChange, options }) {
