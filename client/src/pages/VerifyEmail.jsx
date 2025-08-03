@@ -48,8 +48,8 @@ function VerifyEmail() {
   const handleSubmit = async () => {
     const otpVal = otpArr.join('');
     try {
-      setApiCalled(true);
-      const response = await axios.post('http://localhost:8000/api/v1/verify-email', {
+      setApiCalled(true); //https://satvik-ai.vercel.app/api/v1/verify-email
+      const response = await axios.post('https://satvik-ai.vercel.app/api/v1/verify-email', {
         Email: email,
         Otp: otpVal,
       });
