@@ -3,7 +3,7 @@ import React from 'react'
 import toast from 'react-hot-toast';
 
   export const axiosInstance = axios.create({
-        baseURL:'https://satvik-ai-backend.vercel.app/api/v1',
+        baseURL: 'https://satvik-ai.vercel.app/api/v1/',
         withCredentials:true
     });
 
